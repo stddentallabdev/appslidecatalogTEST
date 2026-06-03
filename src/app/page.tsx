@@ -518,7 +518,7 @@ export default function Home() {
       {/* ========================================================
           1. 2D FULL-SCREEN MEDIA SLIDER LAYER
          ======================================================== */}
-      <div className="relative w-full h-full sm:w-[480px] sm:h-[90vh] sm:max-h-[900px] sm:rounded-3xl sm:border sm:border-white/10 sm:shadow-2xl overflow-hidden bg-slate-900">
+      <div className="relative w-full h-[100dvh] sm:w-[480px] sm:h-[90vh] sm:max-h-[900px] sm:rounded-3xl sm:border sm:border-white/10 sm:shadow-2xl overflow-hidden bg-slate-900">
         
         {/* Slide Canvas Wrapper */}
         <div 
