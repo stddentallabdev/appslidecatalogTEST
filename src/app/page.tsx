@@ -512,7 +512,7 @@ export default function Home() {
     <main 
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
-      className="relative flex flex-1 h-screen w-screen bg-slate-950 overflow-hidden select-none font-sans text-white justify-center items-center"
+      className="relative flex flex-1 h-[100dvh] w-screen bg-slate-950 overflow-hidden select-none font-sans text-white justify-center items-center touch-none"
     >
       
       {/* ========================================================
