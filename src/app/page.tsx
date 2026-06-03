@@ -518,7 +518,7 @@ export default function Home() {
       {/* ========================================================
           1. 2D FULL-SCREEN MEDIA SLIDER LAYER
          ======================================================== */}
-      <div className="relative w-full h-full sm:max-w-[480px] sm:max-h-[900px] sm:rounded-3xl sm:border sm:border-white/10 sm:shadow-2xl overflow-hidden bg-slate-900">
+      <div className="relative w-full h-full sm:w-[480px] sm:h-[90vh] sm:max-h-[900px] sm:rounded-3xl sm:border sm:border-white/10 sm:shadow-2xl overflow-hidden bg-slate-900">
         
         {/* Slide Canvas Wrapper */}
         <div 
@@ -538,7 +538,7 @@ export default function Home() {
               {isCurrentMediaVideo ? (
                 <video
                   ref={videoRef}
-                  src={activeMedia}
+                  src={encodeURI(activeMedia)}
                   autoPlay
                   playsInline
                   webkit-playsinline="true"
@@ -551,7 +551,7 @@ export default function Home() {
                 />
               ) : (
                 <img
-                  src={activeMedia}
+                  src={encodeURI(activeMedia)}
                   alt={activeItem.name}
                   className="h-full w-full object-cover bg-slate-950"
                   draggable={false}
