@@ -37,6 +37,24 @@ export default function Home() {
   const [catalog, setCatalog] = useState<CatalogItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [runtimeError, setRuntimeError] = useState<string | null>(null);
+
+  // Global exception catcher to render runtime failures gracefully
+  useEffect(() => {
+    const handleError = (e: ErrorEvent) => {
+      setRuntimeError(e.message || "Unknown client-side exception");
+    };
+    const handleRejection = (e: PromiseRejectionEvent) => {
+      setRuntimeError(e.reason?.message || e.reason || "Unhandled promise rejection");
+    };
+    window.addEventListener("error", handleError);
+    window.addEventListener("unhandledrejection", handleRejection);
+    return () => {
+      window.removeEventListener("error", handleError);
+      window.removeEventListener("unhandledrejection", handleRejection);
+    };
+  }, []);
+
 
   // Active indexes
   const [activeProductIndex, setActiveProductIndex] = useState(0);
@@ -411,6 +429,20 @@ export default function Home() {
     });
   };
 
+  if (runtimeError) {
+    return (
+      <div className="flex h-screen w-screen flex-col items-center justify-center bg-slate-950 font-sans text-white p-6 text-center">
+        <div className="rounded-3xl border border-red-500/30 bg-red-950/20 p-8 max-w-md backdrop-blur-md">
+          <Sparkles className="h-12 w-12 text-red-400 mx-auto animate-pulse" />
+          <h2 className="mt-4 text-lg font-black tracking-wide text-red-300">ระบบขัดข้อง (Client Error)</h2>
+          <p className="mt-2 text-xs text-slate-300 leading-relaxed font-mono bg-slate-900/50 p-3 rounded-xl border border-white/5">
+            {runtimeError}
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   // Render Loader
   if (loading) {
     return (
@@ -493,7 +525,7 @@ export default function Home() {
           onClick={handleTogglePlay}
           className="absolute inset-0 h-full w-full bg-slate-950 flex items-center justify-center cursor-pointer overflow-hidden"
         >
-          <AnimatePresence initial={false} custom={slideDirection} mode="popLayout">
+          <AnimatePresence initial={false} custom={slideDirection} mode="wait">
             <motion.div
               key={`${activeProductIndex}-${activeMediaIndex}`}
               custom={slideDirection}
