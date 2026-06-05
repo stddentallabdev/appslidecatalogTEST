@@ -301,12 +301,16 @@ export default function Home() {
         clearInterval(timerRef.current);
         timerRef.current = null;
       }
-      setImageProgress(0);
+      if (imageProgress !== 0) {
+        setTimeout(() => setImageProgress(0), 0);
+      }
       return;
     }
 
     // For images: create a 6-second timer progress
-    setImageProgress(0);
+    if (imageProgress !== 0) {
+      setTimeout(() => setImageProgress(0), 0);
+    }
     const duration = 6000; // 6 seconds
     const intervalTime = 100; // update every 100ms
     const step = (intervalTime / duration) * 100;
@@ -326,6 +330,7 @@ export default function Home() {
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading, error, activeProductIndex, activeMediaIndex, isAutoPlayNext, isCurrentMediaVideo]);
 
   // Handle Video Autoplay setup
