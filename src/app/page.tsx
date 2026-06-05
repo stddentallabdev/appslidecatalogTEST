@@ -84,7 +84,7 @@ export default function Home() {
   useEffect(() => {
     async function fetchCatalog() {
       try {
-        const res = await fetch("/api/catalog");
+        const res = await fetch("/catalog.json");
         if (!res.ok) throw new Error("Failed to fetch catalog");
         const data: CatalogItem[] = await res.json();
         

@@ -1,14 +1,15 @@
-import { NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
+const fs = require("fs");
+const path = require("path");
 
-export async function GET() {
+function generateCatalog() {
   try {
-    const catalogPath = path.join(process.cwd(), "public", "catalog");
+    const catalogPath = path.join(__dirname, "..", "public", "catalog");
+    const outputPath = path.join(__dirname, "..", "public", "catalog.json");
 
-    // If catalog directory doesn't exist, return empty array
     if (!fs.existsSync(catalogPath)) {
-      return NextResponse.json([]);
+      console.log("Catalog folder does not exist, writing empty array.");
+      fs.writeFileSync(outputPath, JSON.stringify([]));
+      return;
     }
 
     const items = fs.readdirSync(catalogPath);
@@ -65,7 +66,6 @@ export async function GET() {
           description = filteredLines.join("\n").trim();
         }
 
-        // Only include item if it has media files or at least we have a fallback
         catalogData.push({
           id: item,
           name,
@@ -76,16 +76,19 @@ export async function GET() {
       }
     }
 
-    // Sort items so rtn2026 is always first (or sorted alphabetically, let's keep rtn2026 at the top)
+    // Sort items so rtn2026 is always first, followed by alphabetical/numeric sort
     catalogData.sort((a, b) => {
       if (a.id === "rtn2026") return -1;
       if (b.id === "rtn2026") return 1;
       return a.id.localeCompare(b.id, undefined, { numeric: true, sensitivity: 'base' });
     });
 
-    return NextResponse.json(catalogData);
+    fs.writeFileSync(outputPath, JSON.stringify(catalogData, null, 2), "utf8");
+    console.log(`Successfully generated static catalog at ${outputPath} with ${catalogData.length} items.`);
   } catch (error) {
-    console.error("Error loading catalog:", error);
-    return NextResponse.json({ error: "Failed to scan catalog folder" }, { status: 500 });
+    console.error("Error generating static catalog:", error);
+    process.exit(1);
   }
 }
+
+generateCatalog();
